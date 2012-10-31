@@ -1,0 +1,96 @@
+<link rel="stylesheet" type="text/css" href="../../jQuery.sheet/jquery.sheet.css" />
+<link rel="stylesheet" type="text/css" href="../../jQuery.sheet/jquery-ui/theme/jquery-ui.css" />
+<script type="text/javascript" src="../../jQuery.sheet/jquery.sheet.js"></script>
+<script type="text/javascript" src="../../jQuery.sheet/parser.js"></script>
+<script type="text/javascript" src="../../jQuery.sheet/lang_de.js"></script>
+
+<!--jQuery UI-->
+    <script type="text/javascript" src="../../jQuery.sheet/jquery-ui/ui/jquery-ui.min.js"></script>
+<!--/jQuery UI-->
+<!--Raphaeljs - for charts-->
+    <script type="text/javascript" src="../../jQuery.sheet/plugins/raphael-min.js"></script>
+    <script type="text/javascript" src="../../jQuery.sheet/plugins/g.raphael-min.js"></script>
+<!--/Raphaeljs-->
+<!--ColorPicker-->
+	<link rel="stylesheet" type="text/css" href="../../jQuery.sheet/plugins/jquery.colorPicker.css" />
+	<script type="text/javascript" src="../../jQuery.sheet/plugins/jquery.colorPicker.min.js"></script>
+<!--/ColorPicker-->
+<!--Elastic->
+    <script type="text/javascript" src="../../jQuery.sheet/plugins/jquery.elastic.min.js"></script>
+<!--/Elastic-->
+<!--Advanced_Math-->
+	<script type="text/javascript" src="../../jQuery.sheet/jquery.sheet.advancedfn.js"></script>
+<!--/Advanced_Math-->
+<!--Finance-->
+	<script type="text/javascript" src="../../jQuery.sheet/jquery.sheet.financefn.js"></script>
+<!--/Finance-->
+
+<script type="text/javascript" src="../../channel/bcsocket.js"></script>
+<script type="text/javascript" src="../../share/share.uncompressed.js"></script>
+<script type="text/javascript" src="../../share/json.uncompressed.js"></script>
+<!--<script type="text/javascript" src="../../sheetDocHelper.js"></script>-->
+<script type="text/javascript" src="../../code/spreadsheet.js"></script>
+<script type="text/javascript">
+	var docName = '{{docName}}';
+</script>
+
+<div id="mainWrapper" class="ui-corner-all wrapper">
+ 	<div id="jQuerySheet" class="jQuerySheet" style="height: 380px;">
+	</div>
+	<div id="userDialog">
+		<div class="ui-widget-header ui-corner-tr">
+			<p></p>
+		</div>
+
+		<div class="ui-widget-content ui-corner-br" style="min-height: 200px">
+			<ul id="userList">
+			</ul>
+		</div>
+	</div>
+	<div id="disconnectedDialog">
+		<p></p>
+	</div>
+</div>
+<span id="inlineMenu" style="display: none;">
+	<span>
+        <a href="#" onclick="$.sheet.instance[0].controlFactory.addRow(null, true); return false;" title="Insert Row Before Selected">
+            <img alt="Insert Row Before Selected" src="../../jQuery.sheet/images/sheet_row_add.png"/></a>
+		<a href="#" onclick="$.sheet.instance[0].controlFactory.addRow(); return false;" title="Insert Row After Selected">
+			<img alt="Insert Row After Selected" src="../../jQuery.sheet/images/sheet_row_add.png"/></a>
+        <a href="#" onclick="$.sheet.instance[0].deleteRow(); return false;" title="Delete Row">
+            <img alt="Delete Row" src="../../jQuery.sheet/images/sheet_row_delete.png"/></a>
+		<a href="#" onclick="$.sheet.instance[0].controlFactory.addColumn(null, true); return false;" title="Insert Column Before Selected">
+            <img alt="Insert Column Before Selected" src="../../jQuery.sheet/images/sheet_col_add.png"/></a>
+		<a href="#" onclick="$.sheet.instance[0].controlFactory.addColumn(); return false;" title="Insert Column After Selected">
+			<img alt="Insert Column After Selected" src="../../jQuery.sheet/images/sheet_col_add.png"/></a>
+		<a href="#" onclick="$.sheet.instance[0].deleteColumn(); return false;" title="Delete Column">
+			<img alt="Delete Column" src="../../jQuery.sheet/images/sheet_col_delete.png"/></a>
+		<a href="#" onclick="$.sheet.instance[0].cellFind(); return false;" title="Find">
+			<img alt="Find" src="../../jQuery.sheet/images/find.png"/></a>
+		<a href="#" onclick="toggleCellStyle('styleBold'); return false;" title="Bold">
+			<img alt="Bold" src="../../jQuery.sheet/images/text_bold.png"/></a>
+		<a href="#" onclick="toggleCellStyle('styleItalics'); return false;" title="Italic">
+			<img alt="Italic" src="../../jQuery.sheet/images/text_italic.png"/></a>
+		<a href="#" onclick="toggleCellStyle('styleUnderline', 'styleLineThrough'); return false;" title="Underline">
+			<img alt="Underline" src="../../jQuery.sheet/images/text_underline.png"/></a>
+		<a href="#" onclick="toggleCellStyle('styleLineThrough', 'styleUnderline'); return false;" title="Strikethrough">
+			<img alt="Strikethrough" src="../../jQuery.sheet/images/text_strikethrough.png"/></a>
+		<a href="#" onclick="toggleCellStyle('styleLeft', 'styleCenter styleRight'); return false;" title="Align Left">
+			<img alt="Align Left" src="../../jQuery.sheet/images/text_align_left.png"/></a>
+		<a href="#" onclick="toggleCellStyle('styleCenter', 'styleLeft styleRight'); return false;" title="Align Center">
+			<img alt="Align Center" src="../../jQuery.sheet/images/text_align_center.png"/></a>
+		<a href="#" onclick="toggleCellStyle('styleRight', 'styleLeft styleCenter'); return false;" title="Align Right">
+			<img alt="Align Right" src="../../jQuery.sheet/images/text_align_right.png"/></a>
+		<a href="#" onclick="resizeCellFont('up'); return false;" id="toolbar_increaseFontSize">
+			<img alt="Increase Font Size" src="../../jQuery.sheet/images/increase-font.png"/></a>
+		<a href="#" onclick="resizeCellFont('down'); return false;" id="toolbar_decreaseFontSize">
+			<img alt="Decrease Font Size" src="../../jQuery.sheet/images/decrease-font.png"/></a>
+		<a href="#" onclick="$.sheet.instance[0].obj.formula().val('=HYPERLINK(\'' + prompt('Enter Web Address', 'https://www.koala.upb.de') + '\')').keydown(); return false;" id="toolbar_hyperLink">
+			<img alt="Web Link" src="../../jQuery.sheet/images/page_link.png"/></a>
+		<span class="colorPickers">
+			<input id="toolbar_foregroundColor" class="colorPickerFont" style="width: 16px; height: 16px;"/>
+			<input id="toolbar_backgroundColor" class="colorPickerCell" style="width: 16px; height: 16px;"/>
+		</span>
+	</span>
+</span>
+<a id="formula_button" href="#" style="display: none"><img src="../../jQuery.sheet/images/function.png"/></a>

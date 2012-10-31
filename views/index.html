@@ -1,0 +1,22 @@
+<link rel="stylesheet" type="text/css" href="../../jQuery.sheet/jquery-ui/theme/jquery-ui.css" />
+
+<script type="text/javascript" src="../../code/index.js"></script>
+
+<div id="mainWrapper" class="ui-corner-all wrapper">
+	<div class="ui-corner-all">
+		<p>Wie heißt du?</p>
+		<input type="text" id="userNameInput"/>
+
+		<p>Öffne eine der Vorhandenen Tabellen</p>
+		<ul id="documentList">
+			{{#each documents}}
+  			<li><a href="spreadsheet/{{this}}">{{this}}</a></li>
+  			{{/each}}
+		</ul>
+
+		<p>Oder erstelle eine neue:</p>
+		<input type="text" id="docNameInput"/>
+		<button id="createDocButton">Erstellen</button>
+	</div>
+</div>
+
