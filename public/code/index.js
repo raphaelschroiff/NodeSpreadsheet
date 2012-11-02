@@ -2,6 +2,7 @@ $(function() {
     var userName = $.cookie('userName');
     if (userName) {
         $('#userNameInput').val(userName);
+        $('#openCreatePanel').fadeIn();
     }
 
     $('#createDocButton')
@@ -10,7 +11,13 @@ $(function() {
             document.location.href = 'spreadsheet/'+$('#docNameInput').val();
         });
 
-    $('#userNameInput').change(function() {
+    $('#userNameInput').keyup(function() {
         $.cookie('userName', $('#userNameInput').val(), { expires: 7, path: '/' });
+        if ($('#userNameInput').val()) {
+            $('#openCreatePanel').fadeIn();
+        }
+        else {
+            $('#openCreatePanel').fadeOut();
+        }
     });
 });

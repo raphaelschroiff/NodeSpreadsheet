@@ -208,6 +208,7 @@ server.engine('html', hbs.__express);
 server.set('view engine', 'hbs');
 server.set('views', __dirname + '/views');
 server.use(express.static(__dirname + '/public'));
+server.use(express.cookieParser());
 server.use(express.bodyParser());
 server.use(server.router);
 
@@ -228,7 +229,9 @@ server.get('/doc/get/:docName', function(req, res, next) {
 
 server.get('/spreadsheet/:docName', function(req, res, next) {
     var docName = req.params.docName;
-
+    if (!req.cookies.userName) {
+        res.redirect("/");
+    }
     res.render('spreadsheet.html', {docName: docName});
     if (!documentDict[docName]) {
         createDocument(docName, function (error) {

@@ -62,6 +62,11 @@ body {
     margin-right: auto;
 }
 
+#demoWarning {
+	font-size: 8pt;
+	color: red;
+}
+
 .ui-autocomplete {
 	max-height: 100px;
 	overflow-y: auto;

@@ -190,6 +190,11 @@ var spreadsheetTexts = (function() {
                     name: 'Zahl',
                     type: 'Zahl',
                     optional: false
+                },
+                {
+                    name: 'Nachkommastellen',
+                    type: 'Zahl',
+                    optional: false
                 }
             ]
         },

@@ -5063,7 +5063,7 @@ var jFN = jQuery.sheet.fn = {//fn = standard functions used in cells
 	FIXED: 		function(v, decimals, noCommas) {
 		var delimiter, kiloDelimiter;
 
-		if (this.jS.s.numberFormatDE) {
+		if (jQuery.sheet.instance[0].s.numberFormatDE) {
 			delimiter = ",";
 			kiloDelimiter = ".";
 		}

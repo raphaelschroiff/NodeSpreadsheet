@@ -20,6 +20,9 @@ $(function() {
     $("#disconnectedDialog").dialog(dialog_options);
 
     userName = $.cookie('userName');
+    if (!userName) {
+        userName = "Unknown";
+    }
 
     //open the shareJS document and initiate the jQuery.sheet
     connection = sharejs.open(docName, 'json', {authentication: userName}, function(error, doc) {
@@ -80,7 +83,7 @@ $(function() {
         $("#userDialog").show();
 
         //insert the formula button
-        $('<td></td>').append($('#formula_button'))
+        $('<td></td>').append($('#formula_button').show())
             .css({'width': '16px', 'padding':'2px'})
             .insertBefore('.jSheetControls_formulaParent');
 
@@ -134,14 +137,18 @@ $(function() {
  * @param{Object} doc the ShareJS document for the spreadsheet
  */
 function initSpreadsheet(doc) {
-    var sheet_count, 
-        row_count, 
+    var sheet_count,
+        row_count,
         col_count,
         sheets = doc.at('sheets'),
         rows = doc.at('sheets', 0, 'rows'),
         cols = doc.at('sheets', 0, 'columns'),
         users = doc.at('users'),
         cells,
+        row,
+        col,
+        color,
+        style,
         value;
         
     
@@ -171,7 +178,7 @@ function initSpreadsheet(doc) {
     $('.jSheetTabContainer').hide();
 
     //set localized texts for jQuery.sheet
-    $.sheet.instance[0].msg = spreadsheetTexts.msg;  
+    $.sheet.instance[0].msg = spreadsheetTexts.msg;
 
     //Init the color-pickers
     $('.colorPickerCell').colorPicker().change(function(){
@@ -182,7 +189,7 @@ function initSpreadsheet(doc) {
     });
 
     //column sizes
-    for (var col=0; col<col_count; col++) {
+    for (col=0; col<col_count; col++) {
         var col_info = doc.at('sheets', 0, 'columns', col);
         $.sheet.instance[0].setColumnSize(col, col_info.get().size);
     }
@@ -194,14 +201,14 @@ function initSpreadsheet(doc) {
     row_count = rows.get().length;
     row_count = row_count ? row_count : 15;
 
-    for (var row=0; row<row_count; row++) {
+    for (row=0; row<row_count; row++) {
         cells = doc.at('sheets', sheet, 'rows', row, 'cells');
         col_count = cells.get().length;
         col_count = col_count ? col_count : 5;
         var size = doc.at('sheets', sheet, 'rows', row, 'size');
         $.sheet.instance[0].setRowSize(row, size.get());
 
-        for (var col=0; col<col_count; col++) {
+        for (col=0; col<col_count; col++) {
             var cell = doc.at('sheets', sheet, 'rows', row, 'cells', col);
 
             //set value and formatting of the cell
@@ -216,24 +223,24 @@ function initSpreadsheet(doc) {
             }
             $.sheet.instance[0].setCellValue(row, col, sheet, value);
             
-            for (var style in cell.get().style) {
+            for (style in cell.get().style) {
 
                 if (style == 'font-size') {
                     var font_size = cell.get().style[style];
                     $.sheet.instance[0].setFontSize(sheet, row, col, font_size);
                 }
                 else if (style == 'background-color') {
-                    var color = cell.get().style[style];
+                    color = cell.get().style[style];
                     $.sheet.instance[0].cellSetStyle(sheet, row, col, style, color);
                 }
                 else if (style == 'color') {
-                    var color = cell.get().style[style];
+                    color = cell.get().style[style];
                     $.sheet.instance[0].cellSetStyle(sheet, row, col,style, color);
                 }
                 else if (style == 'flags') {
                     //style-flags
-                    for (var style in cell.get().style.flags) {
-                        $.sheet.instance[0].addCellStyle(row, col, sheet, style);
+                    for (var flag in cell.get().style.flags) {
+                        $.sheet.instance[0].addCellStyle(row, col, sheet, flag);
                     }
                 }
             }
@@ -342,7 +349,7 @@ function afterCellEditEvent(event, source, data) {
 }
 
 /**
- * Gets called after the user cancels a cell editing 
+ * Gets called after the user cancels a cell editing
  *
  * @param {Object} event jQuery event
  * @param {Object} source jQuery sheet which emits the event
@@ -642,7 +649,7 @@ function toggleCellStyle(style, removeStyle) {
         tmp = rowEnd;
         rowEnd = rowStart;
         rowStart = tmp;
-    }                
+    }
     if (colStart > colEnd) {
         tmp = colEnd;
         colEnd = colStart;
