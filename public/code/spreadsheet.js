@@ -1,24 +1,8 @@
 var sharejs_doc;
 var PING_INTERVAL = 5; //in seconds
 var connection;
-var userName = 'TestUser';
+var userName;
 var sheetEditable = true;
-
-/**
- * get the value of a cookie
- * @param {String} name the name of the cookie
- */
-function readCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
-}
-
 
 $(function() {
 
@@ -35,6 +19,8 @@ $(function() {
     $("#disconnectedDialog p").text(spreadsheetTexts.misc.disconnectMessage);
     $("#disconnectedDialog").dialog(dialog_options);
 
+    userName = $.cookie('userName');
+
     //open the shareJS document and initiate the jQuery.sheet
     connection = sharejs.open(docName, 'json', {authentication: userName}, function(error, doc) {
         sharejs_doc = doc;
@@ -42,7 +28,9 @@ $(function() {
         //Setup Ping to the RT-server to indicate that the connection is still alive
         setInterval(function () {
             var op = {p:['users', userName, 'connected'], oi:true};
-            sharejs_doc.submitOp(op);
+            if (sharejs_doc.snapshot.users[userName]) {
+                sharejs_doc.submitOp(op);
+            }
         }, PING_INTERVAL * 1000);
 
         //initialize the sheet contents
@@ -762,18 +750,14 @@ function updateUserList() {
 
     //diaplay the current user in the first item
     color = '#6089af';
-    item = $(userName + ' (Ich)');
-    item.css('color', color);
-    $('<li></li>').css('color', color).append(item).appendTo($('#userList'));
+    $('<li>' + userName + ' (Ich)</li>').css('color', color).appendTo($('#userList'));
 
     for (name in users) {
         if (name && users.hasOwnProperty(name)) {
             userCount++;
 
             if (name != userName) {
-                item = $(name);
-                item.css('color', users[name].color);
-                $('<li></li>').css('color', users[name].color).append(item).appendTo($('#userList'));
+                $('<li>' + name + '</li>').css('color', users[name].color).appendTo($('#userList'));
             }
 
         }

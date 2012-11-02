@@ -1,13 +1,16 @@
 $(function() {
     var userName = $.cookie('userName');
-    if (!userName) {
-        $('#userNameInput').value(userName);
+    if (userName) {
+        $('#userNameInput').val(userName);
     }
 
-    
-    $('#userNameButton')
+    $('#createDocButton')
         .button()
         .click(function( event ) {
-            $.cookie('userName', $('#userNameInput').value(), { expires: 7, path: '/' });
+            document.location.href = 'spreadsheet/'+$('#docNameInput').val();
         });
+
+    $('#userNameInput').change(function() {
+        $.cookie('userName', $('#userNameInput').val(), { expires: 7, path: '/' });
+    });
 });

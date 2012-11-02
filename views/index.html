@@ -1,22 +1,22 @@
-<link rel="stylesheet" type="text/css" href="../../jQuery.sheet/jquery-ui/theme/jquery-ui.css" />
-
 <script type="text/javascript" src="../../code/index.js"></script>
 
 <div id="mainWrapper" class="ui-corner-all wrapper">
-	<div class="ui-corner-all">
-		<p>Wie heißt du?</p>
-		<input type="text" id="userNameInput"/>
+	<div id="dialogWrapper">
+		<div id="startDialog" class="ui-widget-content ui-corner-all">
+			<p>Gib bitte deinen Namen an, damit andere Nutzer sehen wer mit ihnen zusammenarbeitet:</p>
+			<input type="text" id="userNameInput" class="ui-widget-content ui-corner-all"/>
 
-		<p>Öffne eine der Vorhandenen Tabellen</p>
-		<ul id="documentList">
-			{{#each documents}}
-  			<li><a href="spreadsheet/{{this}}">{{this}}</a></li>
-  			{{/each}}
-		</ul>
+			<p>Öffne eine der vorhandenen Tabellen</p>
+			<ul id="documentList">
+				{{#each documents}}
+	  			<li><a href="spreadsheet/{{this}}">{{this}}</a></li>
+	  			{{/each}}
+			</ul>
 
-		<p>Oder erstelle eine neue:</p>
-		<input type="text" id="docNameInput"/>
-		<button id="createDocButton">Erstellen</button>
+			<p>Oder erstelle eine neue:</p>
+			<input type="text" id="docNameInput" class="ui-widget-content ui-corner-all"/>
+			<button id="createDocButton">Erstellen</button>
+		</div>	
 	</div>
 </div>
 

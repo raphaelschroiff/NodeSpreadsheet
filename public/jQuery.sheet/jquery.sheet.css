@@ -213,7 +213,7 @@
 
 .jSheet tr td.jSheetCellLocked
 {
-	background-image: url(../../stripes.png);
+	background-image: url(../../jQuery.sheet/images/stripes.png);
 	background-repeat: repeat;
 }
 .jSheetError {

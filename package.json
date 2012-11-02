@@ -3,9 +3,10 @@
     "node":"0.8",
     "author":"Raphael Schroiff",
     "dependencies": {
-        "share": "0.5",
-        "request": "2.0",
-        "express": "3.0",
-        "color-convert": ""
+        "share": ">=0.5",
+        "request": ">=2.0",
+        "express": ">=3.0",
+        "color-convert": ">=0.3.1",
+        "hbs": ">=1.0.7"
     }
 }

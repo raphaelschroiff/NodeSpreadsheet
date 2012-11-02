@@ -150,6 +150,9 @@ function addUser(docName, agent, callback) {
                     }
                 });
             }
+            else {
+                callback(null);
+            }
         }
     });
 }
@@ -177,11 +180,6 @@ function removeUser(docName, userName) {
             }
             //disconnect the user and remove him from the list in the documentDict
             delete documentDict[docName].users[userName];
-
-            if (Object.keys(documentDict[docName].users).length === 0) {
-                //no users editing the document - remove it
-                    removeDocument(docName);
-            }
         }
     });
 }
@@ -261,18 +259,17 @@ var options = {
             }
             else if (action.name == 'open') {
                 //addUser(action.docName, agent);
-                addUser(action.docName, agent, function(error) {
-                    if (error) {
-                        console.log(error);
-                    }
-                    console.log('user '+ agent.name + ' added');
-                    action.accept();
-                });
-
                 if (documentDict[action.docName]) {
                     documentDict[action.docName].state = "open";
                 }
                 
+                addUser(action.docName, agent, function(error) {
+                    if (error) {
+                        console.log(error);
+                    }
+                });
+
+                action.accept();
             }
             else if (action.name == 'create') {
                 action.accept();

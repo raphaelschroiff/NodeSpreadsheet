@@ -2676,7 +2676,7 @@ jQuery.sheet = {
 				resize: function() {// add resizable jquery.ui if available
 					// resizable container div
 					jS.resizable(s.parent, {
-						handles: 'e',
+						//handles: 'se',
 						minWidth: s.width * 0.5,
 						minHeight: s.height * 0.5,
 
