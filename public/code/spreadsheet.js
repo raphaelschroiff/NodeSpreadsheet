@@ -258,6 +258,8 @@ function initSpreadsheet(doc) {
         }
     }
 
+    $.sheet.instance[0].sheetSyncSize();
+    
     //mark the selection of other users
     for (var user in users.get()) {
         if (user && (user != userName)) {

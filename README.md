@@ -6,4 +6,4 @@ Feautes include several cell formattings, formulas and some basic charts.
 
 Realized with [jQuery.sheet](http://code.google.com/p/jquerysheet/) and [ShareJS](https://github.com/josephg/ShareJS/).
 
-Demo (in German): [Here]http://nodespreadsheet.eu01.aws.af.cm/
+Demo (in German): http://nodespreadsheet.eu01.aws.af.cm/
