@@ -171,8 +171,19 @@ function removeUser(docName, userName) {
         }
         else {
             var userObject = data.snapshot.users[userName];
+            var lock = documentDict[docName].users[userName].lock;
+            
             if (userObject) {
                 server.model.applyOp(docName, {op:[{p:['users', userName], od:userObject}], v:data.v}, function(error) {
+                    if (error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            if (lock) {
+                var op = [{p:['sheets', lock.sheet, 'rows', lock.row, 'cells', lock.col, 'lockedBy'], od:userName}];
+                server.model.applyOp(docName, {op:op, v:data.v}, function(error) {
                     if (error) {
                         console.log(error);
                     }
@@ -294,6 +305,22 @@ var options = {
                     }
                 }
                 else {
+                    var sheet = action.op[0].p[1],
+                        row = action.op[0].p[3],
+                        col = action.op[0].p[5];
+
+                    if (action.op[0].p[6] == 'lockedBy' && action.op[0].oi !== void 0) {
+                        //save position of the lock so it can be removed if the cell
+                        //is still locked when the user disconnects
+                        documentDict[action.docName].users[agent.name].lock = { sheet: sheet,
+                                                                                row: row,
+                                                                                col: col
+                                                                              };
+                    }
+                    else if (action.op[0].p[6] == 'lockedBy' && action.op[0].od !== void 0) {
+                        documentDict[action.docName].users[agent.name].lock = {};
+                    }
+
                     action.accept();
                 }
 
