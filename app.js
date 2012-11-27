@@ -6,8 +6,9 @@ var colorconverter = require("color-convert")();
 var url = require('url');
 var fs = require('fs');
 var os = require('os');
-
 var path = require('path');
+var crypto = require('crypto');
+
 var settings = require('./settings');
 var sheetDocHelper = require('./sheetDocHelper.js');
 
@@ -212,6 +213,13 @@ function timeOut() {
 }
 
 
+var checkAuth = express.basicAuth(function(user, pass){
+    var pass_hash = crypto.createHash('sha512')
+                          .update(settings.ROOT_SALT + pass)
+                          .digest('hex');
+
+    return (user === "root") && (pass_hash === settings.ROOT_HASH);
+});
 
 var server = express();
 //server.use(express.logger());
@@ -223,8 +231,31 @@ server.use(express.cookieParser());
 server.use(express.bodyParser());
 server.use(server.router);
 
+// Action for setting the document contents
+server.post('/doc/set/:docName', checkAuth, function(req, res, next) {
+    var docName = req.params.docName;
+    var content = req.body;
+
+    server.model.getSnapshot(docName, function(error, data) {
+        if (error == 'Document does not exist') {
+            //create the document if it doesn't exist
+                server.model.create(docName, 'json', function() {
+                    server.model.applyOp(docName, {op:[{oi:content, p:[]}], v:0}, function() {
+                    });
+                    documentDict[docName] = {users: {}, state: "open", getNewColor: getColorGenerator()};
+                    res.end('Document created and set');
+                });
+            }
+        else {
+            server.model.applyOp(docName, {op:[{oi:content, p:[]}], v:0}, function() {
+            });
+            res.end('Document set');
+        }
+    });
+});
+
 // Action for getting the document contents
-server.get('/doc/get/:docName', function(req, res, next) {
+server.get('/doc/get/:docName', checkAuth, function(req, res, next) {
     var docName = req.params.docName;
 
     server.model.getSnapshot(docName, function(error, data) {
@@ -234,6 +265,21 @@ server.get('/doc/get/:docName', function(req, res, next) {
         }
         else {
             res.end(JSON.stringify(data.snapshot));
+        }
+    });
+});
+
+// Action to delete a document
+server.get('/doc/delete/:docName', checkAuth, function(req, res, next) {
+    var docName = req.params.docName;
+
+    removeDocument(docName, function(error) {
+        if (error) {
+            res.statusCode = 500;
+            res.end(error);
+        }
+        else {
+            res.end('Document deleted');
         }
     });
 });
